@@ -1,0 +1,19 @@
+function imwritestacka(stack, filename)
+	t = Tiff(filename, 'a');
+
+	tagstruct.ImageLength = size(stack, 1);
+	tagstruct.ImageWidth = size(stack, 2);
+	tagstruct.Photometric = Tiff.Photometric.MinIsBlack;
+	tagstruct.BitsPerSample = 32;
+	tagstruct.SampleFormat = Tiff.SampleFormat.IEEEFP;
+	tagstruct.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky;
+
+	for k = 1:size(stack, 3)
+        img = real(stack(:, :, k));
+		t.setTag(tagstruct)
+		t.write(single(img));
+		t.writeDirectory();
+	end
+
+	t.close();
+end
